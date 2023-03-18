@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class FirstPlayerController : MonoBehaviour
 {
-    private Camera camera;
+    private Camera cam;
     private CharacterController characterController;
 
-    [SerializeField] float movementSpeed = 10.0f;
+    [SerializeField] float gravity = -9.8f;
+    [SerializeField] float movementSpeed = 7.0f;
     [SerializeField] float rotationSpeed = 9.0f;
     [SerializeField] float rotationVerMinDeg = -45.0f;
     [SerializeField] float rotationVerMaxDeg = 45.0f;
@@ -17,7 +18,7 @@ public class FirstPlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        camera = GetComponentInChildren<Camera>();
+        cam = GetComponentInChildren<Camera>();
         characterController = GetComponent<CharacterController>();
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -36,7 +37,7 @@ public class FirstPlayerController : MonoBehaviour
         var deltaX = Input.GetAxis("Horizontal") * movementSpeed;
         var deltaZ = Input.GetAxis("Vertical") * movementSpeed;
 
-        var movement = new Vector3(deltaX, 0, deltaZ);
+        var movement = new Vector3(deltaX, gravity, deltaZ);
         movement = Vector3.ClampMagnitude(movement, movementSpeed);
         movement *= Time.deltaTime;
         movement = transform.TransformDirection(movement);
@@ -56,6 +57,6 @@ public class FirstPlayerController : MonoBehaviour
         rotationVer -= rotationVerDelta;
         rotationVer = Mathf.Clamp(rotationVer, rotationVerMinDeg, rotationVerMaxDeg);
         var cameraAngles = new Vector3(rotationVer, 0, 0);
-        camera.transform.localEulerAngles = cameraAngles;
+        cam.transform.localEulerAngles = cameraAngles;
     }
 }
